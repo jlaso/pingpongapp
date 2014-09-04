@@ -1,0 +1,9 @@
+#appname:PingPongCounter
+#appid:net.jaitec.ppcounter
+#type:ipad
+#guid:4ae07575-24bd-47ee-9897-1f4c33ed8955
+#version:1.0
+#publisher:Patrick JL Laso
+#url:http://www.jaitec.net
+#image:appicon.png
+#desc:App to demonstrate how to connec with a PHP backend

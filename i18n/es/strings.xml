@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="error.email_not_valid">Error: la cuenta de email no es válida</string>
+</resources>

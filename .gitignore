@@ -1,0 +1,18 @@
+# ignored to avoid publish personal data of cloud
+tiapp.xml
+
+# ignored to lightweight repository
+build
+build.log
+
+# ignored temp files
+tmp
+
+# ignored files that start by dot plus underscore
+._*
+
+# ignored specific OSX system files
+.DS_Store
+
+# ignored settings of Titanium
+.settings

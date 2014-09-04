@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="error.email_not_valid">Error: email account is not valid</string>
+    <string name="error.password_not_strength">Error: the password is too simple</string>
+    <string name="error.nick_too_short">Error: the nick is too short</string>
+    <string name="error.player_email_exists_already">Error: the email exists already</string>
+</resources>
