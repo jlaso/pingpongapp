@@ -6,6 +6,10 @@ module.exports = {
 
     NOTIFICATION_MATCH_STARTS: "notification_match_starts",
     NOTIFICATION_SCORE_UPDATE: "notification_score_update",
+    
+    NOTIFICATIONS_TICKS: 75,
+    
+    NOTIFICATION_USER_JOINED: 1,
 
 
     // EVENTS

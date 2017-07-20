@@ -1,16 +1,16 @@
 var appc = require("/appc");
 
 Titanium.API.info("[TITANIUM] "+Titanium.Platform.model);
-var simulator = false; //(Titanium.Platform.model == "Simulator") || (Titanium.Platform.model == "sdk"),
+var simulator = (Titanium.Platform.model == "Simulator") || (Titanium.Platform.model == "sdk"),
     domains = {
-        simulator: 'pingpongserver.dev',
-        production: 'pingpongserver.ahiroo.com'
+        simulator: 'pps.dev',
+        production: 'pingpongcounter.jaitec.es'
     };
-
+    
 const CURRENT_VERSION = "v1";   // server API version to use
 
 if (Titanium.Geolocation.locationServicesEnabled) {
-    Titanium.Geolocation.purpose = 'Determine Current Location';
+    Titanium.Geolocation.purpose = 'Know where are you to match with your opponent.';
 
     var location = require('/location/location');
     location.start({
@@ -48,6 +48,8 @@ if (Titanium.Geolocation.locationServicesEnabled) {
 }
 */
 
+var notifications = [];
+
 module.exports = {
 
     server: 'http://'+ (simulator ? domains.simulator : domains.production) + '/api/' + CURRENT_VERSION + '/',
@@ -61,6 +63,7 @@ module.exports = {
         id: 0,
         name: ""
     },
+    notifications: notifications,
     score: {
         you: 0,
         other: 0
@@ -168,7 +171,61 @@ module.exports = {
             data: { "cloudId": cloud_id }
         });
     },
+    
+    send_notification: function (player, message, callback)
+    {
+    	var d = new Date();
+        Titanium.API.info("send notification");
+        this.xhr({
+            url: 'notification/'+player+'?nocache=' + d.getTime(),
+            auth: true,
+            method: 'POST',
+            coords: true,
+            onload: function(data){
+                if(data.result){
+                    Titanium.API.debug(JSON.stringify(data));
+                    if ("undefined" != typeof callback) callback(data);
+                }else{
+                    Titanium.API.error(JSON.stringify(data));
+                }
+            }
+        });
+    },
+    
+    get_notifications: function(callback)
+    {
+    	var d = new Date();
+        Titanium.API.info("get notifications");
+        this.xhr({
+            url: 'notification/'+this.user+'?nocache=' + d.getTime(),
+            auth: true,
+            method: 'GET',
+            coords: false,
+            onload: function(data){
+                if(data.result){
+                    Titanium.API.debug(JSON.stringify(data));
+                    this.notifications = data.notifications;
+                    Ti.API.info(this.notifications);
+                    if ("undefined" != typeof callback) callback(data);
+                }else{
+                    Titanium.API.error(JSON.stringify(data));
+                }
+            }
+        });
+    },
 
+	check_notification: function(type) {
+        Titanium.API.info("check_notification("+type+")");		
+		for (var i=0; i<this.notifications.length; i++){
+			var notification = this.notifications[i];
+			if (notification.type == type) {
+				this.notifications.splice(i, 1);
+				return true;
+			}
+		}	
+		return false;
+	},
+	
     get_match_info: function (callback)
     {
         var d = new Date();

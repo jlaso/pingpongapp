@@ -16,3 +16,5 @@ tmp
 
 # ignored settings of Titanium
 .settings
+
+Resources/location/*

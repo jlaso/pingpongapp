@@ -1,0 +1,3 @@
+[submodule "Resources/location"]
+	path = Resources/location
+	url = https://github.com/Who828/titanium-location-module.git

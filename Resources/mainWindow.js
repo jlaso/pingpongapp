@@ -7,7 +7,9 @@ var matchMod = require("/match");
 
 module.exports = function(){
 // testing purposes only, to check connectiviy with server
-/*
+
+var notifyInterval = null;
+
 server.xhr({
     url: 'version',
     auth: false,
@@ -16,8 +18,6 @@ server.xhr({
         Titanium.API.info(data.version);
     }
 });
-*/
-
 
 /*
  *
@@ -364,7 +364,21 @@ function bounce()
         }
     };
     ball.direction -= 0.05;
-    ball.bottom += (12 - ball.direction ) * ball.direction;
+    ball.bottom += (12 - ball.direction ) * ball.direction;       
+}
+
+function checkNotifications()
+{
+	// check notifications
+   	server.get_notifications(function(data){
+    	if (server.check_notification(appc.NOTIFICATION_USER_JOINED)) {
+			clearInterval(ball.interval);
+			clearInterval(notifyInterval);
+			var matchMod = require('/match');
+	        var matchWin = matchMod();
+	        matchWin.open();
+		}
+    });
 }
 
 function refreshBtnHandler()
@@ -380,6 +394,8 @@ function cancelBtnHandler()
        method: 'DELETE',
        onload: function(data){
            if(data.result){
+           		if (ball.interval) clearInterval(ball.interval);
+           		if (notifyInterval) clearInterval(notifyInterval);
                 group1.setVisible(true);
                 group2.setVisible(false);
            }else{
@@ -421,8 +437,10 @@ function loginBtnHandler() {
             if(data.result){
                 // save user in local database
                 database.saveUser(server.user, server.password);
+                // get own notifications
+                server.get_notifications();
                 // register user in ACS to obtain push notifications
-                cloud();
+                //cloud();
                 // change to match tab
                 tab2.setActive(true);
                 // active the correct group
@@ -466,6 +484,7 @@ function startBtnHandler() {
                 group1.setVisible(false);
                 group2.setVisible(true);
                 ball.interval = setInterval(bounce, 80);
+                notifyInterval = setInterval(checkNotifications, appc.NOTIFICATIONS_TICKS);
             };
         }
     });

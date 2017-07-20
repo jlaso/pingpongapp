@@ -11,6 +11,10 @@ This is part of a talk, you can see all the information
 you need to follow the instructions to generate the ACS keys in order
 to start sending/receiving push notifications in devices
 
+clone the project
+
+enter into the folder project and launch git submodule init to download the modules needed
+
 ### SERVER
 
 the server devepoment is [here](https://github.com/jlaso/pingpongserver)
